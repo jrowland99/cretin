@@ -944,7 +944,7 @@ for gen in gens:
         f.write("#endif\n")
         f.close()  
 #%% Lines w/ rad hydro 
-base_dir    ='/home/jeff/Research/Export_Control/Cretin/Neon_Cell/rad_hydro_w_lines/v1/'
+base_dir    ='/home/jeff/Research/Export_Control/Cretin/Neon_Cell/rad_hydro_w_lines/v3/'
 com         = 'c ------------------------------------------------------------\n'
 pressures   = [7.5,15,30]# using 2.5e17,5e17,1e18 as densities
 densities   = [2.5e17,5e17,1e18]
@@ -1008,7 +1008,7 @@ for gen in gens:
         f.write("c   Materials\n")
         f.write(com)
         f.write("atoms hydrogenic ne\n")
-        f.write("  modeltype dca term\n")
+        f.write("  modeltype dca \n")
         f.write("\n")
         f.write("region  1 Nnode  T0		! Neon Slab\n")
         f.write("  element  1  N_neon\n")
@@ -1037,22 +1037,81 @@ for gen in gens:
         f.write("\n")
         f.write("source jbndry 12 pbins 1 1.          ! define jbndry from xfile 12\n")
         f.write("xfilebc 12 -1 0 1. 1                  ! use jbndry from xfile 12\n")
+        f.write("background 0. 1.e15 ! add background electrons to fix sw 31 = 4\n")
         f.write(com)
         f.write("\n")
         f.write("linedefault crd \n")
-        f.write("\n")
-        f.write("line 1 1 1 1 1 2     \t! H-like Ly-alpha\n")
-        f.write("    lbins 25 5. 1.02\n")
-        f.write("line 2 1 2 1 2 2       \t! He-like Ly-alpha\n")
-        f.write("    lbins 25 5. 1.02\n")
-        f.write("line 3 1 3 1 3 2       \t! Li-like Ly-alpha\n")
-        f.write("    lbins 50 10 1.02\n")
-        f.write("line 4 1 2 1 2 3       \t! He-like Ly-beta\n")
-        f.write("    lbins 25 5. 1.02\n")
-        f.write("line 5 1 2 1 2 4       \t! He-like Ly-gamma\n")
-        f.write("    lbins 25 5. 1.02\n")
-        f.write("line 6 1 3 1 3 3       \t! Li-like Ly-beta\n")
-        f.write("    lbins 50 10 1.02\n")
+        f.write(com)
+        f.write("c H-like Lyman series to n=5\n")
+        f.write(com)
+        lineid = 1
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 1 1 1 {i}     \t! H-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c He-like Lyman series to n=10\n")
+        f.write(com)
+        for i in range(2,11):
+            f.write(f"line {lineid} 1 2 1 2  {i}     \t! He-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c Li-like Lyman series to n=10\n")
+        f.write(com)
+        for i in range(2,11):
+            f.write(f"line {lineid} 1 3 1 3 {i}      \t! Li-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c Be-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 4 1 4 {i}      \t! Be-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c B-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 5 1 5 {i}      \t! B-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c C-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 6 1 6 {i}      \t! C-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c N-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 7 1 7 {i}      \t! N-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c O-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 8 1 8 {i}      \t! O-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c O-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 9 1 9 {i}      \t! F-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c O-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 10 1 10 {i}      \t! Ne-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
         f.write(com)
         f.write("c   Controls\n")
         f.write(com)
@@ -1072,7 +1131,7 @@ for gen in gens:
         f.write("switch 28  2                    ! 2: initialize in steady-state kinetics w/o radiation transfer\n")
         f.write("switch 29  2                    ! use variable timesteps\n")
         f.write("switch 30 10                    ! dump every n timesteps\n")
-        f.write("switch 31  1                    ! do temperature calculation TD = 1, SS = -1,rad hydro = 4\n")
+        f.write("switch 31  4                    ! do temperature calculation TD = 1, SS = -1,rad hydro = 4\n")
         f.write("switch 33 1			! use excape factors for all photoexcitations if >0\n")
         f.write("switch 36 1			         ! radiation transport on = 1, off = 0\n")
         f.write("switch 37 1                     ! do line transfer = 1\n")
@@ -1270,7 +1329,7 @@ for gen in gens:
         f.write("#endif\n")
         f.close()  
 #%% Lines 
-base_dir    ='/home/jeff/Research/Export_Control/Cretin/Neon_Cell/lines/v12/'
+base_dir    ='/home/jeff/Research/Export_Control/Cretin/Neon_Cell/lines/v13/'
 com         = 'c ------------------------------------------------------------\n'
 pressures   = [7.5,15,30]# using 2.5e17,5e17,1e18 as densities
 densities   = [2.5e17,5e17,1e18]
@@ -1339,7 +1398,7 @@ for gen in gens:
         f.write("region  1 Nnode  T0		! Neon Slab\n")
         f.write("  element  1  N_neon\n")
         f.write("\n")
-        f.write("background 0. 1.e15 \t\t! add background electrons to fix sw 31 = 4\n")
+        # f.write("background 0. 1.e15 \t\t! add background electrons to fix sw 31 = 4\n")
         f.write(com)
         f.write("c   Geometry\n")
         f.write(com)
@@ -1394,35 +1453,49 @@ for gen in gens:
         f.write("c Be-like Lyman series to n=5\n")
         f.write(com)
         for i in range(2,6):
-            f.write(f"line {lineid} 1 3 1 3 {i}      \t! Be-like \n")
+            f.write(f"line {lineid} 1 4 1 4 {i}      \t! Be-like \n")
             f.write("    lbins 50 5. 1.\n")
             lineid = lineid + 1
         f.write(com)
         f.write("c B-like Lyman series to n=5\n")
         f.write(com)
         for i in range(2,6):
-            f.write(f"line {lineid} 1 4 1 4 {i}      \t! B-like \n")
+            f.write(f"line {lineid} 1 5 1 5 {i}      \t! B-like \n")
             f.write("    lbins 50 5. 1.\n")
             lineid = lineid + 1
         f.write(com)
         f.write("c C-like Lyman series to n=5\n")
         f.write(com)
         for i in range(2,6):
-            f.write(f"line {lineid} 1 5 1 5 {i}      \t! C-like \n")
+            f.write(f"line {lineid} 1 6 1 6 {i}      \t! C-like \n")
             f.write("    lbins 50 5. 1.\n")
             lineid = lineid + 1
         f.write(com)
         f.write("c N-like Lyman series to n=5\n")
         f.write(com)
         for i in range(2,6):
-            f.write(f"line {lineid} 1 6 1 6 {i}      \t! N-like \n")
+            f.write(f"line {lineid} 1 7 1 7 {i}      \t! N-like \n")
             f.write("    lbins 50 5. 1.\n")
             lineid = lineid + 1
         f.write(com)
         f.write("c O-like Lyman series to n=5\n")
         f.write(com)
         for i in range(2,6):
-            f.write(f"line {lineid} 1 6 1 6 {i}      \t! O-like \n")
+            f.write(f"line {lineid} 1 8 1 8 {i}      \t! O-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c O-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 9 1 9 {i}      \t! F-like \n")
+            f.write("    lbins 50 5. 1.\n")
+            lineid = lineid + 1
+        f.write(com)
+        f.write("c O-like Lyman series to n=5\n")
+        f.write(com)
+        for i in range(2,6):
+            f.write(f"line {lineid} 1 10 1 10 {i}      \t! Ne-like \n")
             f.write("    lbins 50 5. 1.\n")
             lineid = lineid + 1
         f.write(com)
@@ -1642,7 +1715,7 @@ for gen in gens:
         f.write("#endif\n")
         f.close() 
 #%% Thermal Conduction test
-base_dir    ='/home/jeff/Research/Export_Control/Cretin/Neon_Cell/thermal_timescale/default/v2/'
+base_dir    ='/home/jeff/Research/Export_Control/Cretin/Neon_Cell/rad_hydro_LTE_EOS/'
 com         = 'c ------------------------------------------------------------\n'
 pressures   = [7.5,15,30]# using 2.5e17,5e17,1e18 as densities
 densities   = [2.5e17,5e17,1e18]
@@ -1687,7 +1760,7 @@ for gen in gens:
         f.write("\n")
         f.write("alias SIZE	1.35\n")
         f.write("alias DTMIN 	1e-12\n")
-        f.write("alias DTMAX 	1e-7\n")
+        f.write("alias DTMAX 	1e-9\n")
         f.write("\n")
         # f.write("alias N0        1\n")
         # f.write("alias N1        Nnode+/2\n")
@@ -1729,7 +1802,7 @@ for gen in gens:
         f.write("\n")
         f.write("source jbndry 12 pbins 1 1.          ! define jbndry from xfile 12\n")
         f.write("xfilebc 12 -1 0 1. 1                  ! use jbndry from xfile 12\n")
-        # f.write("background 0. 1.e15 ! add background electrons to fix sw 31 = 4\n")
+        f.write("background 0. 1.e15 ! add background electrons to fix sw 31 = 4\n")
         f.write("ebins 1e3 emin emax\n")
         
         f.write(com)
@@ -1746,10 +1819,10 @@ for gen in gens:
         if rad:
             f.write("switch 100 1\n")
         else:
-            f.write("switch 31  1                    ! do temperature calculation TD = 1, SS = -1,rad hydro = 4\n")
+            f.write("switch 31  4                    ! do temperature calculation TD = 1, SS = -1,rad hydro = 4\n")
             f.write("switch 36 1			! radiation transport on = 1, off = 0\n")
         if use_escape:
-            f.write("switch 33 1			! use excape factors for all photoexcitations if >0\n")
+            f.write("switch 33 4			! use excape factors for all photoexcitations if >0\n")
         if not onezone:
             f.write("switch 2 0			! hydrodynamics 0 = off 1 = on\n")
         f.write("switch 11  1                    ! make .plt file\n")
@@ -1762,6 +1835,7 @@ for gen in gens:
         f.write("switch 30 20                    ! dump every n timesteps\n")
         f.write("switch 37 1                     ! do line transfer\n")
         f.write("switch 44 S44                   ! max iterations per timestep\n")
+        f.write("switch 194 1                    ! use the LTE kinetics EOS in place of the NLTE EOS if !=0\n")
         # f.write("switch 49 1                   ! Electron thermal conduction on = 1\n")
         # f.write("switch 51 0                   ! Electron thermal conduction coeff Spitzer-Harm")
         f.write("\n")

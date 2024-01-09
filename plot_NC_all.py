@@ -643,10 +643,10 @@ matplotlib.rcParams.update(
 gens = ['gen1c']
 directory       ='/home/jeff/Research/Code_Projects/Cloudy_Projects/Z_machine/Neon_cell/Ne_cell_steady_state/all_gen/'
 cretin_dir      = '/home/jeff/Research/Export_Control/Cretin/Neon_Cell/td_latest/'#'/home/jeff/Research/Export_Control/Cretin/Neon_Cell/rad_trans_grid_v2/'
-cretin_ss_dir   = '/home/jeff/Research/Export_Control/Cretin/Neon_Cell/lines/v12/'
+cretin_ss_dir   = '/home/jeff/Research/Export_Control/Cretin/Neon_Cell/lines/v13/'
 helios_dir      = '/home/jeff/Research/Code_Projects/Cloudy_Projects/Z_machine/Neon_cell/helios_data'
 fig, axes       = plt.subplots(1, 3,sharey='row')
-plotPeak        = False
+plotPeak        = True
 offset          = 100
 
 
@@ -685,7 +685,7 @@ for i, gen in enumerate(gens):
         cretin_obj = CretinData(cretin_plt)
         cretin_obj.load_data()
         cretin_data = cretin_obj.get_data()
-        ax.plot(cretin_data['time']-offset,cretin_data['te'],label = 'Cretin default')
+        ax.plot(cretin_data['time']-offset,cretin_data['te'],label = 'Cretin escape factor')
         #--------------------------------------------------------------------------
         # Cretin 2
         #--------------------------------------------------------------------------
@@ -728,7 +728,7 @@ for i, gen in enumerate(gens):
             #ax_twin.yaxis.tick_right()
             ax_twin.set_ylabel('Temperature [eV]')
             #ax_twin.tick_params(axis='y')
-    plt.suptitle(r'Cretin Line transfer through N-like'+'\nScreened Hydrogenic, No term splitting')
+    plt.suptitle(r'Cretin Line transfer through Ne-like'+'\nScreened Hydrogenic, No term splitting')
     if i ==1 :
         ax.set_ylim([0,40])
         if j == 2:

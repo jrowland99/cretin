@@ -1334,7 +1334,7 @@ pressures = [7.5, 15, 30]
 for pressure in pressures:
     params = {
         'name': 'ne_cell',
-        'path': f'/home/jeff/Research/Export_Control/Cretin/Neon_Cell/thermal_timescale/default/{gen}/{pressure}torr/',
+        'path': f'/home/jeff/Research/Export_Control/Cretin/Neon_Cell/thermal_timescale/default/v3/{gen}/{pressure}torr/',
         'pressure': pressure,
         'gen': gen
     }
@@ -1369,11 +1369,11 @@ for pressure in pressures:
         result = trapz(yval, x=xval) / 1.35
         te_dict[time] = result
 
-    heat_r_dict = testobj.data['NET HEAT vs R']
+    heat_r_dict = testobj.data['TOTAL HEAT vs R']
     heat_dict = {}
 
     for time, df in heat_r_dict.items():
-        yval = df['heatjt'].astype(float)
+        yval = df['heatt'].astype(float)
         xval = df['r'].astype(float)
         result = trapz(yval, x=xval) / 1.35
         heat_dict[time] = result
@@ -1389,16 +1389,54 @@ for pressure in pressures:
         inv_timescale = 2 / 3 * heat / te - 1 / ne * dnedt
         timescale_dict[time] = 1 / inv_timescale
 
-    plt.plot(np.abs(list(timescale_dict.keys())) * 1e9, np.abs(list(timescale_dict.values())) * 1e9,
+    plt.plot(np.array(list(timescale_dict.keys())) * 1e9,np.array(list(timescale_dict.values())) * 1e9,
              label=str(pressure) + 'torr')
 
-plt.xlim([80, 110])
-# plt.ylim([-10,800])
+plt.xlim([70, 110])
+plt.ylim([0,50])
 plt.ylabel('timescale [ns]')
 plt.xlabel('exp time [ns]')
 plt.grid(linestyle=':', linewidth=0.5)
 plt.legend()
 plt.tight_layout()
-plt.title("Cretin Thermal timescale, gen1c\n absolute value")
-save_dir = '/home/jeff/Research/Export_Control/Cretin/Neon_Cell/thermal_timescale/default'
-plt.savefig(os.path.join(save_dir,f'cretin_thermal_timescale_ABS_VAL'+ext), transparent=False)
+plt.title("Cretin Thermal timescale, gen1c")
+save_dir = '/home/jeff/Research/Export_Control/Cretin/Neon_Cell/thermal_timescale/default/v3/'
+plt.savefig(os.path.join(save_dir,f'cretin_thermal_timescale'+ext), transparent=False)
+#%% Thermal timescale net heat plot
+gen = 'gen1c'
+pressures = [7.5, 15, 30]
+
+for pressure in pressures:
+    print(pressure)
+    params = {
+        'name': 'ne_cell',
+        'path': f'/home/jeff/Research/Export_Control/Cretin/Neon_Cell/thermal_timescale/default/v3/{gen}/{pressure}torr/',
+        'pressure': pressure,
+        'gen': gen
+    }
+    testobj = CretinData(**params)
+    testobj.read_data()
+    
+    heat_r_dict = testobj.data['TOTAL HEAT vs R']
+    heat_dict = {}
+
+    for time, df in heat_r_dict.items():
+        yval = df['heatt'].astype(float)
+        xval = df['r'].astype(float)
+        result = trapz(yval, x=xval) / 1.35
+        heat_dict[time] = result
+    
+    plt.plot(np.array(list(heat_dict.keys()))[3:] * 1e9,np.array(list(heat_dict.values()))[3:] ,
+                 label=str(pressure) + 'torr')
+    
+plt.xlim([60, 110])
+# plt.ylim([0,10000])
+plt.ylabel('Net heat (heatt) [eV/s]')
+plt.xlabel('exp time [ns]')
+# plt.yscale('log')
+plt.grid(linestyle=':', linewidth=0.5)
+plt.legend()
+plt.tight_layout()
+plt.title("Cretin Heating, gen1c")
+save_dir = '/home/jeff/Research/Export_Control/Cretin/Neon_Cell/thermal_timescale/default/v3/'
+plt.savefig(os.path.join(save_dir,f'cretin_heatt'+ext), transparent=False)
